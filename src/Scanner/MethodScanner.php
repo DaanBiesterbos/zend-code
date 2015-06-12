@@ -328,7 +328,7 @@ class MethodScanner implements ScannerInterface
 
     /**
      * @param  bool $returnScanner
-     * @return array
+     * @return array|ParameterScanner[]
      */
     public function getParameters($returnScanner = false)
     {
