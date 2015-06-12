@@ -13,16 +13,6 @@ use Zend\Code\Generator\Exception\InvalidArgumentException;
 use Zend\Code\Generator\Exception\RuntimeException;
 use Zend\Code\Reflection\MethodDeclarationReflection;
 
-/**
- * Method declaration generator
- *
- * A generator used to generate (interface) method declarations.
- *
- * Class MethodDeclarationGenerator
- * @package   Zend\Code\Generator
- * @author    Daan Biesterbos <daanbiesterbos@gmail.com>
- * @filesource
- */
 class MethodDeclarationGenerator extends AbstractMemberGenerator
 {
     /**

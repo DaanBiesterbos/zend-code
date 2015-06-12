@@ -171,7 +171,7 @@ class ClassScanner implements ScannerInterface
     public function getNamespace()
     {
         $this->scan();
-        if($this->nameInformation instanceof NameInformation) {
+        if ($this->nameInformation instanceof NameInformation) {
             return $this->nameInformation->getNamespace();
         }
         return '';
@@ -941,11 +941,11 @@ class ClassScanner implements ScannerInterface
 
                 $this->lineStart = $tokenLine;
 
-                if(in_array($tokenType, [T_NS_SEPARATOR, T_STRING])) {
+                if (in_array($tokenType, [T_NS_SEPARATOR, T_STRING])) {
                     $namespace .= $tokenContent;
                 }
 
-                if(in_array($tokens[$tokenIndex + 1], ['{', ';'])) {
+                if (in_array($tokens[$tokenIndex + 1], ['{', ';'])) {
                     goto SCANNER_NAMESPACE_END;
                 }
 
@@ -958,7 +958,7 @@ class ClassScanner implements ScannerInterface
                 SCANNER_NAMESPACE_END:
 
                 // If name information
-                if(!$this->nameInformation instanceof NameInformation) {
+                if (!$this->nameInformation instanceof NameInformation) {
                     $this->nameInformation = new NameInformation();
                 }
                 $this->nameInformation->setNamespace($namespace);
