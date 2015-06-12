@@ -233,4 +233,23 @@ class ConstantScanner implements ScannerInterface
 
         $this->isScanned = true;
     }
+
+    /**
+     * @return NameInformation
+     */
+    public function getNameInformation()
+    {
+        return $this->nameInformation;
+    }
+
+    /**
+     * @param NameInformation $nameInformation
+     * @return $this
+     */
+    public function setNameInformation(NameInformation $nameInformation)
+    {
+        $this->nameInformation = $nameInformation;
+        return $this;
+    }
+
 }

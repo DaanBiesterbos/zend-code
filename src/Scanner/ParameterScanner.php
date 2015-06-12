@@ -349,4 +349,24 @@ class ParameterScanner
 
         return $this->isPassedByReference;
     }
+
+    /**
+     * @return null|NameInformation
+     */
+    public function getNameInformation()
+    {
+        return $this->nameInformation;
+    }
+
+    /**
+     * @param null|NameInformation $nameInformation
+     * @return $this
+     */
+    public function setNameInformation(NameInformation $nameInformation)
+    {
+        $this->nameInformation = $nameInformation;
+        return $this;
+    }
+
+
 }

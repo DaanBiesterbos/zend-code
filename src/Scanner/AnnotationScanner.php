@@ -58,6 +58,14 @@ class AnnotationScanner extends AnnotationCollection implements ScannerInterface
     }
 
     /**
+     * @return NameInformation
+     */
+    public function getNameInformation()
+    {
+        return $this->nameInformation;
+    }
+
+    /**
      * @param NameInformation $nameInformation
      */
     public function setNameInformation(NameInformation $nameInformation)
@@ -350,4 +358,5 @@ class AnnotationScanner extends AnnotationCollection implements ScannerInterface
 
         return $tokens;
     }
+
 }

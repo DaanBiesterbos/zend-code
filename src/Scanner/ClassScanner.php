@@ -178,6 +178,24 @@ class ClassScanner implements ScannerInterface
     }
 
     /**
+     * @return NameInformation
+     */
+    public function getNameInformation()
+    {
+        return $this->nameInformation;
+    }
+
+    /**
+     * @param NameInformation $nameInformation
+     * @return $this
+     */
+    public function setNameInformation(NameInformation $nameInformation)
+    {
+        $this->nameInformation = $nameInformation;
+        return $this;
+    }
+
+    /**
      * Return a name of class
      *
      * @return null|string

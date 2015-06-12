@@ -143,6 +143,16 @@ class CachingFileScanner extends FileScanner
     }
 
     /**
+     * @param $className
+     * @return $this
+     */
+    public function setClassNameInformation($className)
+    {
+        $this->fileScanner->setClassNameInformation($className);
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getFunctionNames()
