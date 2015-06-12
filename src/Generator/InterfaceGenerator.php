@@ -12,14 +12,11 @@ namespace Zend\Code\Generator;
 use Zend\Code\Reflection\InterfaceReflection;
 use Zend\Code\Generator\Exception\InvalidArgumentException;
 
-<<<<<<< HEAD
 /**
  * Interface generator
  *
  * A generator used to generate PHP interfaces.
  */
-=======
->>>>>>> Fix docblocks + short array syntax
 class InterfaceGenerator extends AbstractGenerator
 {
     const OBJECT_TYPE = 'interface';
