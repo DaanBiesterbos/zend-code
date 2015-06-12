@@ -11,6 +11,7 @@ namespace Zend\Code\Generator\DocBlock\Tag;
 
 use Zend\Code\Generator\AbstractGenerator;
 use Zend\Code\Generator\DocBlock\TagManager;
+use Zend\Code\Generic\Tag\TagInterface;
 use Zend\Code\Reflection\DocBlock\Tag\TagInterface as ReflectionTagInterface;
 
 class LicenseTag extends AbstractGenerator implements TagInterface

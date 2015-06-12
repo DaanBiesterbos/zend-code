@@ -9,6 +9,8 @@
 
 namespace Zend\Code\Generator\DocBlock\Tag;
 
+use Zend\Code\Generic\Tag\TagInterface;
+
 class MethodTag extends AbstractTypeableTag implements TagInterface
 {
     /**
