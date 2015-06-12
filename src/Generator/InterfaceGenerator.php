@@ -88,7 +88,7 @@ class InterfaceGenerator extends AbstractGenerator
 
         /* @var \Zend\Code\Reflection\ClassReflection[] $parentInterfaces */
         $parentInterfaces = $reflection->getParentInterfaces();
-        $interfaceNames = [];
+        $interfaceNames = array();
         if ($parentInterfaces) {
             foreach ($parentInterfaces as $parentInterface) {
                 $interfaceNames[] = $parentInterface->getName();
@@ -97,7 +97,7 @@ class InterfaceGenerator extends AbstractGenerator
 
         $ig->setExtendedInterfaces($interfaceNames);
 
-        $constants = [];
+        $constants = array();
         foreach ($reflection->getConstants() as $name => $value) {
             $constants[] = array(
                 'name' => $name,
@@ -107,7 +107,7 @@ class InterfaceGenerator extends AbstractGenerator
 
         $ig->addConstants($constants);
 
-        $methods = [];
+        $methods = array();
         foreach ($reflection->getMethods() as $reflectionMethod) {
             $className = ($ig->getNamespaceName()) ? $ig->getNamespaceName() . "\\" . $ig->getName() : $ig->getName();
             if ($reflectionMethod->getDeclaringInterface()->getName() == $className) {
@@ -191,8 +191,8 @@ class InterfaceGenerator extends AbstractGenerator
         $name = null,
         $namespaceName = null,
         $flags = null,
-        $parents = [],
-        $methods = [],
+        $parents = array(),
+        $methods = array(),
         $docBlock = null
     ) {
         if ($name !== null) {
@@ -207,7 +207,7 @@ class InterfaceGenerator extends AbstractGenerator
         if (is_array($parents)) {
             $this->setExtendedInterfaces($parents);
         }
-        if ($methods !== []) {
+        if ($methods !== array()) {
             $this->addMethods($methods);
         }
         if ($docBlock !== null) {
@@ -548,7 +548,7 @@ class InterfaceGenerator extends AbstractGenerator
      */
     public function addMethod(
         $name = null,
-        array $parameters = [],
+        array $parameters = array(),
         $flags = MethodDeclarationGenerator::FLAG_PUBLIC,
         $body = null,
         $docBlock = null
