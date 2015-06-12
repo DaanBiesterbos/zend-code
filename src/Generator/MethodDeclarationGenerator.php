@@ -23,7 +23,7 @@ class MethodDeclarationGenerator extends AbstractMemberGenerator
     /**
      * @var ParameterGenerator[]
      */
-    protected $parameters = array();
+    protected $parameters = [];
 
     /**
      * @param MethodDeclarationReflection $reflectionMethod
@@ -112,7 +112,7 @@ class MethodDeclarationGenerator extends AbstractMemberGenerator
      */
     public function __construct(
         $name = null,
-        array $parameters = array(),
+        array $parameters = [],
         $flags = self::FLAG_PUBLIC,
         $body = null,
         $docBlock = null
@@ -223,7 +223,7 @@ class MethodDeclarationGenerator extends AbstractMemberGenerator
             .' function '.$this->getName().'(';
 
         $parameters = $this->getParameters();
-        $parameterOutput = array();
+        $parameterOutput = [];
         if (!empty($parameters)) {
             foreach ($parameters as $parameter) {
                 $parameterOutput[] = $parameter->generate();
