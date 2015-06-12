@@ -844,7 +844,7 @@ class ClassScanner implements ScannerInterface
 
     public function __toString()
     {
-        // @todo
+        return '';
     }
 
     /**
