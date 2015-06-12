@@ -922,7 +922,8 @@ class ClassGenerator extends AbstractGenerator
         $indent = $this->getIndentation();
         $output = '';
 
-        if (null !== ($namespace = $this->getNamespaceName())) {
+        $namespace = $this->getNamespaceName();
+        if (!empty($namespace)) {
             $output .= 'namespace ' . $namespace . ';' . self::LINE_FEED . self::LINE_FEED;
         }
 
