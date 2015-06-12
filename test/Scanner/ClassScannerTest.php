@@ -11,6 +11,7 @@ namespace ZendTest\Code\Scanner;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Code\Annotation;
+use Zend\Code\Scanner\ClassScanner;
 use Zend\Code\Scanner\FileScanner;
 use Zend\Stdlib\ErrorHandler;
 use ZendTest\Code\TestAsset\TraitWithSameMethods;
@@ -294,4 +295,39 @@ class ClassScannerTest extends TestCase
 
         $class->getMethods();
     }
+
+    public function testClassScannerCanReadSingleNamespaceWithoutCurlyBraces()
+    {
+        $code = <<<'PHP_CODE'
+<?php
+
+namespace My\Awesome\SuperNamespace;
+
+class Bar {
+
+    const FOO_BAR = 5;
+
+    public function foo()
+    {
+        echo 'bar';
+    }
+
+}
+PHP_CODE;
+
+        $classScanner = new ClassScanner(token_get_all($code));
+        $this->assertEquals('My\Awesome\SuperNamespace', $classScanner->getNamespace());
+
+    }
+
+    public function testClassScannerCanReadMultipleNamespaces()
+    {
+        $file  = new FileScanner(__DIR__ . '/TestAsset/TestClassesMultipleNamespaces.php');
+        $classes = $file->getClasses();
+        $this->assertEquals('ZendTest\TestClass\FooNamespace', $classes[0]->getNamespace());
+        $this->assertEquals('Foo', $classes[0]->getShortName());
+        $this->assertEquals('ZendTest\TestClass\BarNamespace', $classes[1]->getNamespace());
+        $this->assertEquals('Bar', $classes[1]->getShortName());
+    }
+
 }

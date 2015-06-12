@@ -164,6 +164,20 @@ class ClassScanner implements ScannerInterface
     }
 
     /**
+     * Return a name of the namespace
+     *
+     * @return null|string
+     */
+    public function getNamespace()
+    {
+        $this->scan();
+        if($this->nameInformation instanceof NameInformation) {
+            return $this->nameInformation->getNamespace();
+        }
+        return '';
+    }
+
+    /**
      * Return a name of class
      *
      * @return null|string
@@ -919,6 +933,38 @@ class ClassScanner implements ScannerInterface
         SCANNER_TOP:
 
         switch ($tokenType) {
+
+            case T_NAMESPACE:
+
+                $namespace = '';
+                SCANNER_NAMESPACE_TOP:
+
+                $this->lineStart = $tokenLine;
+
+                if(in_array($tokenType, [T_NS_SEPARATOR, T_STRING])) {
+                    $namespace .= $tokenContent;
+                }
+
+                if(in_array($tokens[$tokenIndex + 1], ['{', ';'])) {
+                    goto SCANNER_NAMESPACE_END;
+                }
+
+                if ($MACRO_TOKEN_ADVANCE() === false) {
+                    goto SCANNER_END;
+                }
+                goto SCANNER_NAMESPACE_TOP;
+
+
+                SCANNER_NAMESPACE_END:
+
+                // If name information
+                if(!$this->nameInformation instanceof NameInformation) {
+                    $this->nameInformation = new NameInformation();
+                }
+                $this->nameInformation->setNamespace($namespace);
+                $namespace = '';
+
+                goto SCANNER_CONTINUE;
 
             case T_DOC_COMMENT:
 
