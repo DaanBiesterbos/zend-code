@@ -7,11 +7,10 @@
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
 
-namespace Zend\Code\Generic\Tag;
+namespace Zend\Code\Generator\DocBlock\Tag;
 
 use Zend\Code\Generic\Prototype\PrototypeInterface;
 
 interface TagInterface extends PrototypeInterface
 {
-
 }

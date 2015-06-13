@@ -11,7 +11,6 @@ namespace Zend\Code\Generator\DocBlock\Tag;
 
 use Zend\Code\Generator\DocBlock\TagManager;
 use Zend\Code\Reflection\DocBlock\Tag\TagInterface as ReflectionTagInterface;
-use Zend\Code\Generic\Tag\TagInterface;
 
 class ParamTag extends AbstractTypeableTag implements TagInterface
 {

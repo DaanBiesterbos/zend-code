@@ -10,8 +10,8 @@
 namespace Zend\Code\Generator;
 
 use Zend\Code\Generator\DocBlock\Tag;
+use Zend\Code\Generator\DocBlock\Tag\TagInterface;
 use Zend\Code\Generator\DocBlock\TagManager;
-use Zend\Code\Generic\Tag\TagInterface;
 use Zend\Code\Reflection\DocBlockReflection;
 
 class DocBlockGenerator extends AbstractGenerator

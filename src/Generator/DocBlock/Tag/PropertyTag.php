@@ -9,8 +9,6 @@
 
 namespace Zend\Code\Generator\DocBlock\Tag;
 
-use Zend\Code\Generic\Tag\TagInterface;
-
 class PropertyTag extends AbstractTypeableTag implements TagInterface
 {
     /**

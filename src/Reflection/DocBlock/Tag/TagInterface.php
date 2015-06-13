@@ -10,9 +10,8 @@
 namespace Zend\Code\Reflection\DocBlock\Tag;
 
 use Zend\Code\Generic\Prototype\PrototypeInterface;
-use Zend\Code\Generic\Tag\TagInterface as GenericTagInterface;
 
-interface TagInterface extends GenericTagInterface
+interface TagInterface extends PrototypeInterface
 {
     /**
      * @param  string $content
