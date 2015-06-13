@@ -10,7 +10,7 @@
 namespace ZendTest\Code\Generator\TestAsset;
 
 use Zend\Code\Generator\DocBlock\Tag\AbstractTypeableTag;
-use Zend\Code\Generic\Tag\TagInterface;
+use Zend\Code\Generator\DocBlock\Tag\TagInterface;
 
 class TypeableTag extends AbstractTypeableTag implements TagInterface
 {

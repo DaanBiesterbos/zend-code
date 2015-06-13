@@ -14,6 +14,16 @@ use Zend\Code\Generic\Prototype\PrototypeInterface;
 interface TagInterface extends PrototypeInterface
 {
     /**
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * @return string
+     */
+    public function getContent();
+
+    /**
      * @param  string $content
      * @return void
      */

@@ -67,6 +67,14 @@ class AuthorTag implements TagInterface
         return $this->authorEmail;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getContent()
+    {
+        return ((!empty($this->authorName)) ? ' ' . $this->authorName : '')  . ((!empty($this->authorEmail)) ? ' <' . $this->authorEmail . '>' : '');
+    }
+
     public function __toString()
     {
         return 'DocBlock Tag [ * @' . $this->getName() . ' ]' . PHP_EOL;

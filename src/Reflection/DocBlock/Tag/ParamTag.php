@@ -35,6 +35,16 @@ class ParamTag implements TagInterface, PhpDocTypedTagInterface
     }
 
     /**
+     * @return null|string
+     */
+    public function getContent()
+    {
+        return ((!empty($this->types)) ? ' ' . implode('|', $this->types) : '') .
+               ((!empty($this->variableName)) ? ' $' . $this->variableName : '') .
+               ((!empty($this->description)) ? ' ' . $this->description : '');
+    }
+
+    /**
      * Initializer
      *
      * @param  string $tagDocBlockLine

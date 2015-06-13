@@ -67,6 +67,14 @@ class LicenseTag implements TagInterface
         return $this->licenseName;
     }
 
+    /**
+     * @return null|string
+     */
+    public function getContent()
+    {
+        return ((!empty($this->url)) ? ' ' . $this->url : '') . ((!empty($this->licenseName)) ? ' ' . $this->licenseName : '');
+    }
+
     public function __toString()
     {
         return 'DocBlock Tag [ * @' . $this->getName() . ' ]' . PHP_EOL;

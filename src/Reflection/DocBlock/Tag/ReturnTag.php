@@ -30,6 +30,14 @@ class ReturnTag implements TagInterface, PhpDocTypedTagInterface
     }
 
     /**
+     * @return string
+     */
+    public function getContent()
+    {
+        return implode('|', $this->types) . ((!empty($this->description)) ? ' ' . $this->description : '');
+    }
+
+    /**
      * @param  string $tagDocBlockLine
      * @return void
      */

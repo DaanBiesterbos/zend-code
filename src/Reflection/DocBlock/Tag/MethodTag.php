@@ -72,6 +72,17 @@ class MethodTag implements TagInterface, PhpDocTypedTagInterface
     }
 
     /**
+     * @return null|string
+     */
+    public function getContent()
+    {
+        return  (($this->isStatic) ? ' static' : '') .
+                ((!empty($this->types)) ? ' ' . implode('|', $this->types) : '') .
+                ((!empty($this->methodName)) ? ' ' . $this->methodName . '()' : '') .
+                ((!empty($this->description)) ? ' ' . $this->description : '');
+    }
+
+    /**
      * Get return value type
      *
      * @return null|string

@@ -29,6 +29,11 @@ class ThrowsTag implements TagInterface, PhpDocTypedTagInterface
         return 'throws';
     }
 
+    public function getContent()
+    {
+        return ((!empty($this->types)) ? ' ' . implode('|', $this->types) : '') . ((!empty($this->description)) ? ' ' . $this->description : '');
+    }
+
     /**
      * @param  string $tagDocBlockLine
      * @return void

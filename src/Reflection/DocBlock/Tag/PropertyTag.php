@@ -35,6 +35,17 @@ class PropertyTag implements TagInterface, PhpDocTypedTagInterface
     }
 
     /**
+     * @return null|string
+     */
+    public function getContent()
+    {
+        return ((!empty($this->types)) ? ' ' . implode('|', $this->types) : '') .
+               ((!empty($this->propertyName)) ? ' $' . $this->propertyName : '') .
+               ((!empty($this->description)) ? ' ' . $this->description : '');
+    }
+
+
+    /**
      * Initializer
      *
      * @param  string $tagDocblockLine
