@@ -21,9 +21,8 @@ class ArrayValueScannerTest extends TestCase
      */
     public function testShouldParseSimpleArrays()
     {
-        $scanner = new ArrayValueScanner();
-        $this->assertEquals([1,2,3,4,5], $scanner->scan('[1,2,3,4,5]'));
-        $this->assertEquals([1,2,3,4,5], $scanner->scan('array(1,2,3,4,5)'));
+        $this->assertEquals([1,2,3,4,5], ArrayValueScanner::createFromString('[1,2,3,4,5]')->scan());
+        $this->assertEquals([1,2,3,4,5], ArrayValueScanner::createFromString('array(1,2,3,4,5)')->scan());
     }
 
     /**
@@ -31,9 +30,8 @@ class ArrayValueScannerTest extends TestCase
      */
     public function testShouldParseAssociativeArrays()
     {
-        $scanner = new ArrayValueScanner();
-        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo'], $scanner->scan("['foo' => 'bar', 'bar' => 'foo']"));
-        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo'], $scanner->scan("array('foo' => 'bar', 'bar' => 'foo')"));
+        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo'], ArrayValueScanner::createFromString("['foo' => 'bar', 'bar' => 'foo']")->scan());
+        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo'], ArrayValueScanner::createFromString("array('foo' => 'bar', 'bar' => 'foo')")->scan());
     }
 
     /**
@@ -41,9 +39,8 @@ class ArrayValueScannerTest extends TestCase
      */
     public function testShouldHandleMultiDimensionalArrays()
     {
-        $scanner = new ArrayValueScanner();
-        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo', 'foobar' => [1,2,3]], $scanner->scan("['foo' => 'bar', 'bar' => 'foo', 'foobar' => [1,2,3]]"));
-        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo', 'foobar' => [1,2,3]], $scanner->scan("array('foo' => 'bar', 'bar' => 'foo', 'foobar' => array(1,2,3))"));
+        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo', 'foobar' => [1,2,3]], ArrayValueScanner::createFromString("['foo' => 'bar', 'bar' => 'foo', 'foobar' => [1,2,3]]")->scan());
+        $this->assertEquals(['foo' => 'bar', 'bar' => 'foo', 'foobar' => [1,2,3]], ArrayValueScanner::createFromString("array('foo' => 'bar', 'bar' => 'foo', 'foobar' => array(1,2,3))")->scan());
     }
 
     /**
@@ -51,8 +48,7 @@ class ArrayValueScannerTest extends TestCase
      */
     public function testShouldHandleConstants()
     {
-        $scanner = new ArrayValueScanner();
-        $this->assertEquals(['bar' => E_ERROR], $scanner->scan("['bar' => E_ERROR]"));
+        $this->assertEquals(['bar' => E_ERROR], ArrayValueScanner::createFromString("['bar' => E_ERROR]")->scan());
 
         // This does not work, it seems like we must account for this in the generator itself. The same goes for undefined constants.
         //$this->assertEquals(['foo' => 'bar', 'bar' => self::CONSTANT_FOR_TESTING], $scanner->scan("array('foo' => 'bar', 'bar' => self::CONSTANT_FOR_TESTING)"));

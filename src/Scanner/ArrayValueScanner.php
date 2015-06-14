@@ -10,6 +10,7 @@
 namespace Zend\Code\Scanner;
 
 use Zend\Code\Exception\InvalidArgumentException;
+use Zend\Code\Exception\RuntimeException;
 
 /**
  * Array value scanner
@@ -37,24 +38,50 @@ class ArrayValueScanner extends ValueScanner
     /** @var array  */
     protected $arrayKeys = [];
 
+    /** @var array  */
+    protected $arrayTokens = [];
+
     /**
-     * @param string $string   e.g. array('foo' => 123, 'bar' => [0 => 123, 1 => 12345])
-     *
-     * @return array
+     * @param array $arrayTokens
      */
-    public function scan($string)
+    public function __construct(array $arrayTokens)
+    {
+        $this->arrayTokens = $arrayTokens;
+    }
+
+    /**
+     * @param string $string e.g. array('foo' => 123, 'bar' => [0 => 123, 1 => 12345])
+     *
+     * @return self
+     */
+    public static function createFromString($string)
     {
         // Remove whitespace and semi colons
         $sanitized = trim($string, " \t\n\r\0\x0B;");
-        if($this->isArray($sanitized)) {
-            if($tokens = $this->tokenize("<?php {$sanitized}")) {
-                $this->initialize($tokens);
-                return $this->parse($tokens);
-            }
+
+        // Get tokens
+        $tokens = token_get_all("<?php {$sanitized}");
+
+        // Create scanner
+        $scanner = new self($tokens);
+        if($scanner->isArray($sanitized)) {
+            return  $scanner;
         }
 
-        // Given array format is invalid
         throw new InvalidArgumentException("Invalid array format.");
+    }
+
+    /**
+     * @return array
+     */
+    public function scan()
+    {
+        if($tokens = $this->filter()) {
+            $this->initialize($tokens);
+            return $this->parse($tokens);
+        }
+
+        throw new RuntimeException("No tokens to process.");
     }
 
     /**
@@ -161,7 +188,7 @@ class ArrayValueScanner extends ValueScanner
             return $array;
         }
 
-        return [];
+        throw new InvalidArgumentException("Invalid token. The first token must either be 'T_ARRAY' or '['.");
     }
 
     /**
@@ -195,16 +222,14 @@ class ArrayValueScanner extends ValueScanner
     }
 
     /**
-     * @param $string
      * @return array|false
      */
-    protected function tokenize($string)
+    protected function filter()
     {
-        $tokens = token_get_all($string);
-        if(is_array($tokens)) {
+        if(is_array($this->arrayTokens)) {
 
             // Filter tokens
-            $tokens = array_values(array_filter($tokens, [$this, 'accept']));
+            $tokens = array_values(array_filter($this->arrayTokens, [$this, 'accept']));
 
             // Normalize token format, make syntax characters look like tokens for consistent parsing
             return $this->normalize($tokens);
