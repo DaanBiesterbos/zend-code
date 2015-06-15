@@ -9,18 +9,26 @@
 
 namespace Zend\Code\Scanner;
 
+use Zend\Code\NameInformation;
+
 class ValueScanner
 {
     /** @var array  */
     protected $arrayTokens = [];
 
+    /** @var null|NameInformation  */
+    protected $nameInformation = null;
+
     /**
-     * @param array $tokenArray
+     * @param array $arrayTokens
+     * @param NameInformation $nameInformation
      */
-    public function __construct(array $tokenArray)
+    public function __construct(array $arrayTokens, NameInformation $nameInformation = null)
     {
-        $this->arrayTokens = $tokenArray;
+        $this->arrayTokens = $arrayTokens;
+        $this->nameInformation = $nameInformation;
     }
+
 
 
     /**
@@ -31,7 +39,7 @@ class ValueScanner
         if($this->isArray($this->toString())) {
 
             // Delegate to array value scanner
-            $scanner = new ArrayValueScanner($this->arrayTokens);
+            $scanner = ($this->nameInformation) ? new ArrayValueScanner($this->arrayTokens, $this->nameInformation) : new ArrayValueScanner($this->arrayTokens);
 
             return $scanner->scan();
 
@@ -156,7 +164,7 @@ class ValueScanner
      *
      * @return mixed
      */
-    protected function parseAtomic($value)
+    protected function castType($value)
     {
         // If the parameter type is a string than it will be enclosed with quotes
         if($this->isString($value)) {

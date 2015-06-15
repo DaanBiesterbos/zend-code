@@ -11,6 +11,7 @@ namespace Zend\Code\Scanner;
 
 use Zend\Code\Exception\InvalidArgumentException;
 use Zend\Code\Exception\RuntimeException;
+use Zend\Code\NameInformation;
 
 /**
  * Array value scanner
@@ -41,20 +42,26 @@ class ArrayValueScanner extends ValueScanner
     /** @var array  */
     protected $arrayTokens = [];
 
+    /** @var null|NameInformation  */
+    protected $nameInformation = null;
+
     /**
      * @param array $arrayTokens
+     * @param NameInformation $nameInformation
      */
-    public function __construct(array $arrayTokens)
+    public function __construct(array $arrayTokens, NameInformation $nameInformation = null)
     {
         $this->arrayTokens = $arrayTokens;
+        $this->nameInformation = $nameInformation;
     }
 
     /**
      * @param string $string e.g. array('foo' => 123, 'bar' => [0 => 123, 1 => 12345])
+     * @param NameInformation $nameInformation
      *
      * @return self
      */
-    public static function createFromString($string)
+    public static function createFromString($string, NameInformation $nameInformation = null)
     {
         // Remove whitespace and semi colons
         $sanitized = trim($string, " \t\n\r\0\x0B;");
@@ -63,7 +70,7 @@ class ArrayValueScanner extends ValueScanner
         $tokens = token_get_all("<?php {$sanitized}");
 
         // Create scanner
-        $scanner = new self($tokens);
+        $scanner = new self($tokens, $nameInformation);
         if($scanner->isArray($sanitized)) {
             return  $scanner;
         }
@@ -153,16 +160,23 @@ class ArrayValueScanner extends ValueScanner
                     $text = $this->trimQuotes($token[1]);
                     if($next[0] === T_DOUBLE_COLON) {
 
+                        // Resolve class name
+                        if($this->nameInformation and !in_array($text, ['self', 'parent', 'static'])) {
+                            $text = $this->nameInformation->resolveName($text);
+                        }
+
                         // Move pointer to double colon
                         next($tokens);
+
                         // Move pointer to constant and process token
                         $constantToken = next($tokens);
+
                         $text .= '::' . $this->trimQuotes($constantToken[1]);
 
                     }
 
                     // Parse string
-                    $array[($assoc !== false) ? $assoc : $this->createKey($index)] = $this->parseAtomic($text);
+                    $array[($assoc !== false) ? $assoc : $this->createKey($index)] = $this->castType($text);
 
                 } else if(in_array($token[0], [T_LNUMBER, T_DNUMBER]))  {
 
@@ -176,7 +190,7 @@ class ArrayValueScanner extends ValueScanner
                     }
                     next($tokens);
 
-                    $array[($assoc !== false) ? $assoc : $this->createKey($index)] = $this->parseAtomic($value);
+                    $array[($assoc !== false) ? $assoc : $this->createKey($index)] = $this->castType($value);
                 }
 
                 // Increment index unless a associative key is used. In this case we want too reuse the current value.

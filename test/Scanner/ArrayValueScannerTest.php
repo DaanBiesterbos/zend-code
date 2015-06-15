@@ -10,6 +10,7 @@
 namespace ZendTest\Code\Scanner;
 
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Code\NameInformation;
 use Zend\Code\Scanner\ArrayValueScanner;
 
 class ArrayValueScannerTest extends TestCase
@@ -49,6 +50,7 @@ class ArrayValueScannerTest extends TestCase
     public function testShouldHandleConstants()
     {
         $this->assertEquals(['bar' => E_ERROR], ArrayValueScanner::createFromString("['bar' => E_ERROR]")->scan());
+        $this->assertEquals(['bar' => \PDO::PARAM_INT], ArrayValueScanner::createFromString("['bar' => PDO::PARAM_INT]")->scan());
 
         // This does not work, it seems like we must account for this in the generator itself. The same goes for undefined constants.
         //$this->assertEquals(['foo' => 'bar', 'bar' => self::CONSTANT_FOR_TESTING], $scanner->scan("array('foo' => 'bar', 'bar' => self::CONSTANT_FOR_TESTING)"));

@@ -39,7 +39,7 @@ class AtomicValueScanner extends ValueScanner
             next($tokens);
         }
 
-        return $this->parseAtomic($value);
+        return $this->castType($value);
     }
 
     /**

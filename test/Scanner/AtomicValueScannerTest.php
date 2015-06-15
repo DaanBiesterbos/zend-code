@@ -10,6 +10,7 @@
 namespace ZendTest\Code\Scanner;
 
 use PHPUnit_Framework_TestCase as TestCase;
+use Zend\Code\Scanner\AtomicValueScanner;
 use Zend\Code\Scanner\ValueScanner;
 
 class AtomicValueScannerTest extends TestCase
@@ -19,40 +20,12 @@ class AtomicValueScannerTest extends TestCase
      */
     public function testShouldDetectDataType()
     {
-        $scanner = new ValueScanner([]);
-        $this->assertTrue($scanner->isBool('true'));
-        $this->assertTrue($scanner->isBool('false'));
-        $this->assertFalse($scanner->isBool('fapse'));
-        $this->assertTrue($scanner->isNumeric('10.5'));
-        $this->assertTrue($scanner->isNumeric(33.333));
-        $this->assertFalse($scanner->isNumeric('33.f3'));
-        $this->assertTrue($scanner->isInteger(100));
-        $this->assertTrue($scanner->isInteger('-200'));
-        $this->assertTrue($scanner->isInteger('0'));
-        $this->assertTrue($scanner->isInteger('-0'));
-        $this->assertFalse($scanner->isInteger('33.0'));
+        $this->assertInternalType('int', (new AtomicValueScanner(token_get_all('123')))->scan());
+        $this->assertInternalType('float', (new AtomicValueScanner(token_get_all('10.5')))->scan());
+        $this->assertInternalType('string', (new AtomicValueScanner(token_get_all('Hoi')))->scan());
+        $this->assertInternalType('bool', (new AtomicValueScanner(token_get_all('false')))->scan());
+        $this->assertInternalType('null', (new AtomicValueScanner(token_get_all('NULL')))->scan());
 
-        $this->assertTrue($scanner->isArray('[]'));
-        $this->assertTrue($scanner->isArray('array()'));
-        $this->assertTrue($scanner->isArray('array("bar", "foo")'));
-        $this->assertTrue($scanner->isArray('["foo", "bar", ["sub_foo"]]'));
-
-        $this->assertTrue($scanner->isNull('null'));
-
-        $this->assertTrue($scanner->isString('"This is a string"'));
-        $this->assertTrue($scanner->isString("'this is another string'"));
-        $this->assertTrue($scanner->isString("this is another string"));
-
-    }
-
-    /**
-     * Test if the value scanner can handle quotes properly
-     */
-    public function testShouldHandleQuotes()
-    {
-        $scanner = new ValueScanner([]);
-        $this->assertTrue($scanner->isQuoted('"true"'));
-        $this->assertEquals('true', $scanner->trimQuotes('"true"'));
     }
 
 }
