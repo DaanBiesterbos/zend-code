@@ -286,45 +286,4 @@ class ArrayValueScanner extends ValueScanner
 
         }, $tokens);
     }
-
-    /**
-     * @param $value
-     *
-     * @return mixed
-     */
-    protected function parseAtomic($value)
-    {
-        // If the parameter type is a string than it will be enclosed with quotes
-        if($this->isString($value)) {
-            // Is (already) a string
-            if(defined($value)) {
-                // Is constant!
-                return constant($value);
-            }
-            return $value;
-        }
-
-        // Parse integer
-        if($this->isInteger($value)) {
-            return (int) $value;
-        }
-
-        // Parse other sorts of numeric values (floats, scientific notation etc)
-        if($this->isNumeric($value)) {
-            return  (float) $value;
-        }
-
-        // Parse bool
-        if($this->isBool($value)) {
-            return ($value == 'true') ? true : false;
-        }
-
-        // Parse null
-        if($this->isNull($value)) {
-            return null;
-        }
-
-        // Return unsupported type as string.
-        return $value;
-    }
 }

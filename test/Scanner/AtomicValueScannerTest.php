@@ -12,7 +12,7 @@ namespace ZendTest\Code\Scanner;
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\Code\Scanner\ValueScanner;
 
-class ValueScannerTest extends TestCase
+class AtomicValueScannerTest extends TestCase
 {
     /**
      * Test if the value scanner detects the correct data types

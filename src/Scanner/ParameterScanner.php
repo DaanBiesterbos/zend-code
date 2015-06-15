@@ -69,6 +69,11 @@ class ParameterScanner
     protected $isDefaultValueAvailable = false;
 
     /**
+     * @var array
+     */
+    protected $defaultValueTokens = [];
+
+    /**
      * @var bool
      */
     protected $isOptional = false;
@@ -195,7 +200,7 @@ class ParameterScanner
         }
 
         if ($this->name !== null) {
-            $this->defaultValue .= trim((is_string($token)) ? $token : $token[1]);
+            $this->defaultValueTokens[] = $token;
         }
 
         SCANNER_CONTINUE:
@@ -209,6 +214,12 @@ class ParameterScanner
 
         if ($this->class && $this->nameInformation) {
             $this->class = $this->nameInformation->resolveName($this->class);
+        }
+
+        // Get default value
+        if(!empty($this->defaultValueTokens)) {
+            $valueScanner = new ValueScanner($this->defaultValueTokens);
+            $this->defaultValue = $valueScanner->scan();
         }
 
         $this->isScanned = true;
