@@ -15,12 +15,6 @@ use Zend\Code\NameInformation;
 
 class PropertyScanner implements ScannerInterface
 {
-    const T_BOOLEAN = "boolean";
-    const T_INTEGER = "int";
-    const T_STRING  = "string";
-    const T_ARRAY   = "array";
-    const T_UNKNOWN = "unknown";
-
     /**
      * @var bool
      */
@@ -70,6 +64,11 @@ class PropertyScanner implements ScannerInterface
      * @var bool
      */
     protected $isStatic = false;
+
+    /**
+     * @var bool
+     */
+    protected $hasDefaultValue = false;
 
     /**
      * @var string
@@ -159,7 +158,14 @@ class PropertyScanner implements ScannerInterface
      */
     public function getValueType()
     {
-        return $this->valueType;
+        $this->scan();
+
+        if(!$this->hasDefaultValue) {
+            // @deprecated Keep non existent datatype around for backward compatibility, should be removed in the future.
+            return 'unknown';
+        }
+
+        return gettype($this->value);
     }
 
     /**
@@ -253,82 +259,80 @@ class PropertyScanner implements ScannerInterface
             throw new Exception\RuntimeException('No tokens were provided');
         }
 
-        /**
-         * Variables & Setup
-         */
-        $value            = '';
-        $concatenateValue = false;
-
+        // Set vars
+        $valueTokens      = [];
         $tokens = &$this->tokens;
         reset($tokens);
 
-        foreach ($tokens as $token) {
-            $tempValue = $token;
-            if (!is_string($token)) {
-                list($tokenType, $tokenContent, $tokenLine) = $token;
+        while ($token = current($tokens)) {
 
-                switch ($tokenType) {
-                    case T_DOC_COMMENT:
-                        if ($this->docComment === null && $this->name === null) {
-                            $this->docComment = $tokenContent;
-                        }
-                        break;
+            // Extract values from token
+            list($tokenType, $tokenContent, $tokenLine) = (is_array($token)) ? $token : [null, $token, null];
 
-                    case T_VARIABLE:
-                        $this->name = ltrim($tokenContent, '$');
-                        break;
+            switch ($tokenType) {
+                case T_DOC_COMMENT:
+                    if ($this->docComment === null && $this->name === null) {
+                        $this->docComment = $tokenContent;
+                    }
+                    break;
 
-                    case T_PUBLIC:
-                        // use defaults
-                        break;
+                case T_VARIABLE:
+                    $this->name = ltrim($tokenContent, '$');
+                    break;
 
-                    case T_PROTECTED:
-                        $this->isProtected = true;
-                        $this->isPublic = false;
-                        break;
+                case T_PUBLIC:
+                    // use defaults
+                    break;
 
-                    case T_PRIVATE:
-                        $this->isPrivate = true;
-                        $this->isPublic = false;
-                        break;
+                case T_PROTECTED:
+                    $this->isProtected = true;
+                    $this->isPublic = false;
+                    break;
 
-                    case T_STATIC:
-                        $this->isStatic = true;
-                        break;
-                    default:
-                        $tempValue = trim($tokenContent);
-                        break;
-                }
+                case T_PRIVATE:
+                    $this->isPrivate = true;
+                    $this->isPublic = false;
+                    break;
+
+                case T_STATIC:
+                    $this->isStatic = true;
+                    break;
+                default:
+
+                    // Read default value
+                    if($token === '=') {
+
+                        // Move pointer to the next token
+                        $token = next($tokens);
+
+                        do {
+
+                            // Extract tokens we need for the value
+                            $current = current($tokens);
+                            if(is_string($current)) {
+                                if(trim($current) === '' or $current === ';') {
+                                    continue;
+                                }
+                            }
+                            $valueTokens[] = $current;
+
+                        } while(next($tokens) && $token !== ';');
+
+                    }
+
+                    break;
             }
 
-            //end value concatenation
-            if (!is_array($token) && trim($token) == ";") {
-                $concatenateValue = false;
-            }
-
-            if (true === $concatenateValue) {
-                $value .= $tempValue;
-            }
-
-            //start value concatenation
-            if (!is_array($token) && trim($token) == "=") {
-                $concatenateValue = true;
-            }
+            next($tokens);
         }
 
-        $this->valueType = self::T_UNKNOWN;
-        if ($value == "false" || $value == "true") {
-            $this->valueType = self::T_BOOLEAN;
-        } elseif (is_numeric($value)) {
-            $this->valueType = self::T_INTEGER;
-        } elseif (0 === strpos($value, 'array') || 0 === strpos($value, "[")) {
-            $this->valueType = self::T_ARRAY;
-        } elseif (substr($value, 0, 1) === '"' || substr($value, 0, 1) === "'") {
-            $value = substr($value, 1, -1); // Remove quotes
-            $this->valueType = self::T_STRING;
+        // Scan default value
+        if(!empty($valueTokens)) {
+            $this->hasDefaultValue = true;
+            $valueScanner = new ValueScanner($valueTokens);
+            $this->value = $valueScanner->scan();
         }
 
-        $this->value = empty($value) ? null : $value;
         $this->isScanned = true;
     }
 }

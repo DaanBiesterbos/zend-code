@@ -33,7 +33,7 @@ class AtomicValueScanner extends ValueScanner
             $tokenValue = trim($token[1]);
             if($token[0] & T_DNUMBER|T_NUM_STRING|T_LNUMBER|T_STRING|T_NUM_STRING|T_CONSTANT_ENCAPSED_STRING) {
                 if($tokenValue !== '') {
-                    $value .= $token[1];
+                    $value .= $this->trimQuotes($token[1]);
                 }
             }
             next($tokens);

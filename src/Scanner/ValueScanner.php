@@ -36,6 +36,7 @@ class ValueScanner
      */
     public function scan()
     {
+        $string = $this->toString();
         if($this->isArray($this->toString())) {
 
             // Delegate to array value scanner

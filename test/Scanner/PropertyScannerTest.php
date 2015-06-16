@@ -54,13 +54,14 @@ class PropertyScannerTest extends TestCase
 <?php
 class Foo
 {
-    protected $empty;
+    private $empty;
     private $string = 'string';
     private $int = 123;
     private $array = array('test' => 2,2);
     private $arraynew = ['test' => 2,2];
     private $notarray = "['test' => 2,2]";
     private $status = false;
+    private $nullvalue = null;
 }
 CLASS;
 
@@ -80,22 +81,26 @@ CLASS;
                     break;
                 case "int":
                     $this->assertEquals('123', $value);
-                    $this->assertEquals('int', $valueType);
+                    $this->assertEquals('integer', $valueType);
                     break;
                 case "array":
-                    $this->assertEquals("array('test'=>2,2)", $value);
+                    $this->assertEquals(array('test'=>2,2), $value);
                     $this->assertEquals('array', $valueType);
                     break;
                 case "arraynew":
-                    $this->assertEquals("['test'=>2,2]", $value);
+                    $this->assertEquals(['test'=>2,2], $value);
                     $this->assertEquals('array', $valueType);
                     break;
                 case "notarray":
                     $this->assertEquals('string', $valueType);
                     break;
                 case "status":
-                    $this->assertEquals('false', $value);
+                    $this->assertEquals(false, $value);
                     $this->assertEquals('boolean', $valueType);
+                    break;
+                case "nullvalue":
+                    $this->assertEquals(null, $value);
+                    $this->assertEquals('NULL', $valueType);
                     break;
             }
         }
