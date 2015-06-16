@@ -344,9 +344,6 @@ class ValueGenerator extends AbstractGenerator
                 break;
             case self::TYPE_ARRAY:
                 $output .= 'array(';
-                if ($this->outputMode == self::OUTPUT_MULTIPLE_LINE) {
-                    $output .= self::LINE_FEED . str_repeat($this->indentation, $this->arrayDepth + 1);
-                }
                 $outputParts = array();
                 $noKeyIndex  = 0;
                 foreach ($value as $n => $v) {
@@ -369,17 +366,31 @@ class ValueGenerator extends AbstractGenerator
                         $outputParts[] = (is_int($n) ? $n : self::escape($n)) . ' => ' . $partV;
                     }
                 }
-                $padding = ($this->outputMode == self::OUTPUT_MULTIPLE_LINE)
-                    ? self::LINE_FEED . str_repeat($this->indentation, $this->arrayDepth + 1)
-                    : ' ';
-                $output .= implode(',' . $padding, $outputParts);
-                if ($this->outputMode == self::OUTPUT_MULTIPLE_LINE) {
-                    if (count($outputParts) > 0) {
-                        $output .= ',';
+
+                // Check if we have any entries, if not we should not print any whitespace. An empty array should just look like array()
+                if(!empty($outputParts)) {
+
+                    // Append whitespace
+                    if ($this->outputMode == self::OUTPUT_MULTIPLE_LINE) {
+                        $output .= self::LINE_FEED . str_repeat($this->indentation, $this->arrayDepth + 1);
                     }
-                    $output .= self::LINE_FEED . str_repeat($this->indentation, $this->arrayDepth);
+
+                    // Set padding
+                    $padding = ($this->outputMode == self::OUTPUT_MULTIPLE_LINE)
+                        ? self::LINE_FEED . str_repeat($this->indentation, $this->arrayDepth + 1)
+                        : ' ';
+
+                    // Append array entries
+                    $output .= implode(',' . $padding, $outputParts);
+                    if ($this->outputMode == self::OUTPUT_MULTIPLE_LINE) {
+                        if (count($outputParts) > 0) {
+                            $output .= ',';
+                        }
+                        $output .= self::LINE_FEED . str_repeat($this->indentation, $this->arrayDepth);
+                    }
                 }
                 $output .= ')';
+
                 break;
             case self::TYPE_OTHER:
             default:
