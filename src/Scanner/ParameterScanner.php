@@ -217,7 +217,7 @@ class ParameterScanner
         }
 
         // Get default value
-        if(!empty($this->defaultValueTokens)) {
+        if (!empty($this->defaultValueTokens)) {
             $valueScanner = new ValueScanner($this->defaultValueTokens, $this->nameInformation);
             $this->defaultValue = $valueScanner->scan();
         }
@@ -378,6 +378,4 @@ class ParameterScanner
         $this->nameInformation = $nameInformation;
         return $this;
     }
-
-
 }

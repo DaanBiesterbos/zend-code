@@ -341,5 +341,4 @@ class DocBlockScanner implements ScannerInterface
         $this->nameInformation = $nameInformation;
         return $this;
     }
-
 }

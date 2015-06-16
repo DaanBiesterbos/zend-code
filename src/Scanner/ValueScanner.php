@@ -36,14 +36,12 @@ class ValueScanner
      */
     public function scan()
     {
-        $string = $this->toString();
-        if($this->isArray($this->toString())) {
+        if ($this->isArray($this->toString())) {
 
             // Delegate to array value scanner
             $scanner = ($this->nameInformation) ? new ArrayValueScanner($this->arrayTokens, $this->nameInformation) : new ArrayValueScanner($this->arrayTokens);
 
             return $scanner->scan();
-
         }
 
         // Delegate to atomic value scanner
@@ -58,7 +56,7 @@ class ValueScanner
     public function toString()
     {
         $string = '';
-        foreach($this->arrayTokens as $token) {
+        foreach ($this->arrayTokens as $token) {
             $string .= trim((is_string($token)) ? $token : $token[1]);
         }
 
@@ -86,7 +84,7 @@ class ValueScanner
     public function isString($value)
     {
         // Raw strings are quoted. We will trim the value but this function should still return true for values enclosed with quotes.
-        if($this->isQuoted($value)) {
+        if ($this->isQuoted($value)) {
             return true;
         }
 
@@ -168,9 +166,9 @@ class ValueScanner
     protected function castType($value)
     {
         // If the parameter type is a string than it will be enclosed with quotes
-        if($this->isString($value)) {
+        if ($this->isString($value)) {
             // Is (already) a string
-            if(defined($value)) {
+            if (defined($value)) {
                 // Is constant!
                 return constant($value);
             }
@@ -178,22 +176,22 @@ class ValueScanner
         }
 
         // Parse integer
-        if($this->isInteger($value)) {
+        if ($this->isInteger($value)) {
             return (int) $value;
         }
 
         // Parse other sorts of numeric values (floats, scientific notation etc)
-        if($this->isNumeric($value)) {
+        if ($this->isNumeric($value)) {
             return  (float) $value;
         }
 
         // Parse bool
-        if($this->isBool($value)) {
+        if ($this->isBool($value)) {
             return ($value == 'true') ? true : false;
         }
 
         // Parse null
-        if($this->isNull($value)) {
+        if ($this->isNull($value)) {
             return null;
         }
 

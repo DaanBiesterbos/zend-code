@@ -251,5 +251,4 @@ class ConstantScanner implements ScannerInterface
         $this->nameInformation = $nameInformation;
         return $this;
     }
-
 }

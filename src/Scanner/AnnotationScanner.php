@@ -358,5 +358,4 @@ class AnnotationScanner extends AnnotationCollection implements ScannerInterface
 
         return $tokens;
     }
-
 }

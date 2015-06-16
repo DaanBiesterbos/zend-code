@@ -160,7 +160,7 @@ class PropertyScanner implements ScannerInterface
     {
         $this->scan();
 
-        if(!$this->hasDefaultValue) {
+        if (!$this->hasDefaultValue) {
             // @deprecated Keep non existent datatype around for backward compatibility, should be removed in the future.
             return 'unknown';
         }
@@ -300,7 +300,7 @@ class PropertyScanner implements ScannerInterface
                 default:
 
                     // Read default value
-                    if($token === '=') {
+                    if ($token === '=') {
 
                         // Move pointer to the next token
                         $token = next($tokens);
@@ -309,15 +309,13 @@ class PropertyScanner implements ScannerInterface
 
                             // Extract tokens we need for the value
                             $current = current($tokens);
-                            if(is_string($current)) {
-                                if(trim($current) === '' or $current === ';') {
+                            if (is_string($current)) {
+                                if (trim($current) === '' or $current === ';') {
                                     continue;
                                 }
                             }
                             $valueTokens[] = $current;
-
-                        } while(next($tokens) && $token !== ';');
-
+                        } while (next($tokens) && $token !== ';');
                     }
 
                     break;
@@ -327,7 +325,7 @@ class PropertyScanner implements ScannerInterface
         }
 
         // Scan default value
-        if(!empty($valueTokens)) {
+        if (!empty($valueTokens)) {
             $this->hasDefaultValue = true;
             $valueScanner = new ValueScanner($valueTokens);
             $this->value = $valueScanner->scan();
