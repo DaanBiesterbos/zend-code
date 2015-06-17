@@ -1415,9 +1415,14 @@ class ClassScanner implements ScannerInterface
 
     /**
      * Invalidate the current state. This is useful in cases when we're using the scanner and modifying the class at the same time.
+     *
+     * @param array $classTokens
+     *
+     * @return void
      */
-    public function invalidate()
+    public function refresh(array $classTokens)
     {
+        $this->tokens = $classTokens;
         $this->isScanned = false;
         $this->docComment = null;
         $this->name = null;
