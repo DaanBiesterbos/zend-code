@@ -208,6 +208,31 @@ class DocBlockGenerator extends AbstractGenerator
     }
 
     /**
+     * @param $name
+     * @return TagInterface
+     */
+    public function getTag($name)
+    {
+        /** @var TagInterface $tag */
+        foreach($this->tags as $tag) {
+            if($tag->getName() == $name) {
+                return $tag;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $name
+     * @return bool
+     */
+    public function hasTag($name)
+    {
+        return $this->getTag($name) instanceof TagInterface;
+    }
+
+    /**
      * @param bool $value
      * @return DocBlockGenerator
      */
