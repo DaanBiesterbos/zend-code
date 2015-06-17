@@ -1412,4 +1412,28 @@ class ClassScanner implements ScannerInterface
 
         return;
     }
+
+    /**
+     * Invalidate the current state. This is useful in cases when we're using the scanner and modifying the class at the same time.
+     */
+    public function invalidate()
+    {
+        $this->isScanned = false;
+        $this->docComment = null;
+        $this->name = null;
+        $this->shortName = null;
+        $this->lineStart = null;
+        $this->lineEnd = null;
+        $this->isTrait = false;
+        $this->isFinal = false;
+        $this->isAbstract = false;
+        $this->isInterface = false;
+        $this->parentClass = null;
+        $this->shortParentClass = null;
+        $this->interfaces = array();
+        $this->shortInterfaces = array();
+        $this->infos = array();
+        $this->traits = array();
+        $this->methods = array();
+    }
 }
