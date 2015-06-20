@@ -368,7 +368,7 @@ class ValueGenerator extends AbstractGenerator
                 }
 
                 // Check if we have any entries, if not we should not print any whitespace. An empty array should just look like array()
-                if(!empty($outputParts)) {
+                if (!empty($outputParts)) {
 
                     // Append whitespace
                     if ($this->outputMode == self::OUTPUT_MULTIPLE_LINE) {

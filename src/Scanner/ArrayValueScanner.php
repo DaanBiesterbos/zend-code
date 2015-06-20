@@ -71,7 +71,7 @@ class ArrayValueScanner extends ValueScanner
 
         // Create scanner
         $scanner = new self($tokens, $nameInformation);
-        if ($scanner->isArray($sanitized)) {
+        if ($scanner->getRecognizer()->isArray($sanitized)) {
             return  $scanner;
         }
 
@@ -141,7 +141,7 @@ class ArrayValueScanner extends ValueScanner
                 if ($next[0] === T_DOUBLE_ARROW) {
                     // Is assoc key, trim quotes
                     $assoc = trim($token[1], '"\'');
-                    if ($this->isInteger($assoc)) {
+                    if ($this->getRecognizer()->isInteger($assoc)) {
                         $index = $assoc = (int) $assoc;
                     }
                     continue;

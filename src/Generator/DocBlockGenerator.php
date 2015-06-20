@@ -214,8 +214,8 @@ class DocBlockGenerator extends AbstractGenerator
     public function getTag($name)
     {
         /** @var TagInterface $tag */
-        foreach($this->tags as $tag) {
-            if($tag->getName() == $name) {
+        foreach ($this->tags as $tag) {
+            if ($tag->getName() == $name) {
                 return $tag;
             }
         }
