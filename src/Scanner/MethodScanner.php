@@ -558,6 +558,7 @@ class MethodScanner implements ScannerInterface
 
             case T_VARIABLE:
             case T_STRING:
+            case T_CALLABLE:
 
                 if ($tokenType === T_STRING && $parentCount === 0) {
                     $this->name = $tokenContent;
