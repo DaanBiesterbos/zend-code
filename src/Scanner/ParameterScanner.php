@@ -189,7 +189,7 @@ class ParameterScanner
                 goto SCANNER_CONTINUE;
             }
         } else {
-            if ($this->name === null && ($token[0] === T_STRING || $token[0] === T_NS_SEPARATOR)) {
+            if ($this->name === null && ($token[0] === T_STRING || $token[0] === T_CALLABLE || $token[0] === T_NS_SEPARATOR)) {
                 $this->class .= $token[1];
                 goto SCANNER_CONTINUE;
             }
