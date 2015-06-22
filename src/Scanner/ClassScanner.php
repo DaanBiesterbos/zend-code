@@ -32,6 +32,11 @@ class ClassScanner implements ScannerInterface
     protected $name = null;
 
     /**
+     * @var int
+     */
+    protected $namespaceLine = 0;
+
+    /**
      * @var string
      */
     protected $shortName = null;
@@ -175,6 +180,15 @@ class ClassScanner implements ScannerInterface
             return $this->nameInformation->getNamespace();
         }
         return '';
+    }
+
+    /**
+     * @return int
+     */
+    public function getNamespaceLine()
+    {
+        $this->scan();
+        return $this->namespaceLine;
     }
 
     /**
@@ -958,6 +972,7 @@ class ClassScanner implements ScannerInterface
                 SCANNER_NAMESPACE_TOP:
 
                 $this->lineStart = $tokenLine;
+                $this->namespaceLine = $tokenLine;
 
                 if (in_array($tokenType, [T_NS_SEPARATOR, T_STRING])) {
                     $namespace .= $tokenContent;
