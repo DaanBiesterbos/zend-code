@@ -36,6 +36,7 @@ class TypeRecognizerTest extends TestCase
         $this->assertTrue($recognizer->isArray('array("bar", "foo")'));
         $this->assertTrue($recognizer->isArray('["foo", "bar", ["sub_foo"]]'));
         $this->assertTrue($recognizer->isNull('null'));
+        $this->assertTrue($recognizer->isNull('NULL'));
         $this->assertTrue($recognizer->isString('"This is a string"'));
         $this->assertTrue($recognizer->isString("'this is another string'"));
         $this->assertTrue($recognizer->isString("this is another string"));
